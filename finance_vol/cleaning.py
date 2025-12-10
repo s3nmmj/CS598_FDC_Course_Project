@@ -1,8 +1,12 @@
 import numpy as np
 import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def clean_prices(df):
+    logging.info("Cleaning price data")
     df = df.copy()
 
     # Ensure numeric types
@@ -20,10 +24,12 @@ def clean_prices(df):
     # Set back to datetime index
     df = df.set_index("date").sort_index()
 
+    logging.info("Finished cleaning price data")
     return df
 
 
 def compute_volatility_features(df):
+    logging.info("Computing volatility features")
     frames = []
     for t, g in df.groupby("ticker"):
         g = g.sort_index()
@@ -48,6 +54,7 @@ def compute_volatility_features(df):
 
         frames.append(g)
 
+    logging.info("Finished computing volatility features")
     return pd.concat(frames)
 
 

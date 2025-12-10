@@ -1,5 +1,8 @@
+import logging
 import pandera as pa
 from pandera import Column, DataFrameSchema, Check
+
+logging.basicConfig(level=logging.INFO)
 
 stocks_schema = DataFrameSchema(
     {
@@ -50,3 +53,8 @@ integrated_schema = DataFrameSchema(
     index=pa.Index(pa.DateTime, coerce=True, name="date", nullable=False),
     coerce=True,
 )
+
+def validate_schema(schema, data):
+    logging.info(f"Validating data with schema: {schema}")
+    schema.validate(data, lazy=True)
+    logging.info("Schema validation completed")

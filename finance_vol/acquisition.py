@@ -2,8 +2,11 @@ import os
 import pandas as pd
 import yfinance as yf
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
 
 try:
     from fredapi import Fred
@@ -19,6 +22,7 @@ except ImportError:
 
 
 def fetch_yfinance_prices(tickers, start, end):
+    logging.info(f"Fetching Yahoo Finance prices for tickers: {tickers}, start: {start}, end: {end}")
     """Fetch daily OHLCV data for one or more tickers from Yahoo Finance."""
     data = yf.download(
         tickers=tickers,
@@ -72,6 +76,7 @@ def fetch_yfinance_prices(tickers, start, end):
 
     df = pd.concat(frames, axis=0)
     df.index.name = "date"
+    logging.info("Finished fetching Yahoo Finance prices")
     return df.reset_index().set_index("date").sort_index()
 
 

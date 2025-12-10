@@ -4,6 +4,9 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 import sys
 import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 @dataclass
@@ -24,6 +27,7 @@ def _lib_versions():
     }
 
 def write_outputs(df_raw_stocks, df_raw_macro, df_clean_stocks, df_clean_macro, df_integrated, outdir):
+    logging.info(f"Writing outputs to directory: {outdir}")
     raw_dir = Path(outdir) / "data_raw"
     curated_dir = Path(outdir) / "data_curated"
     meta_dir = Path(outdir) / "metadata"
@@ -45,3 +49,4 @@ def write_outputs(df_raw_stocks, df_raw_macro, df_clean_stocks, df_clean_macro, 
     )
     with open(meta_dir / "provenance.json", "w") as f:
         json.dump(asdict(prov), f, indent=2)
+    logging.info("Finished writing outputs")

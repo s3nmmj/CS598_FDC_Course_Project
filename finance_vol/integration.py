@@ -1,6 +1,10 @@
 from .schema_definitions import integrated_schema
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 def integrate(stocks, macro):
+    logging.info("Integrating stock and macro data")
     # Ensure index name is 'date'
     stocks = stocks.copy()
     macro = macro.copy()
@@ -25,4 +29,5 @@ def integrate(stocks, macro):
     ]
     merged = merged[keep]
     integrated_schema.validate(merged, lazy=True)
+    logging.info("Finished integrating data")
     return merged
