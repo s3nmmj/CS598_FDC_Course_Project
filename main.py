@@ -1,4 +1,5 @@
 import argparse
+from datetime import datetime
 from finance_vol import acquisition, cleaning, integration, io_utils, tests
 from finance_vol.schema_definitions import stocks_schema, macro_schema
 
@@ -20,12 +21,15 @@ def main():
 
     tickers = [t.strip().upper() for t in args.tickers.split(",")]
 
+    # Set end date to today if not provided
+    end_date = args.end if args.end else datetime.today().strftime("%Y-%m-%d")
+
     # --- Data Acquisition ---
     print("[step] Fetching prices from Yahoo Finance...")
-    df_raw_stocks = acquisition.fetch_yfinance_prices(tickers, args.start, args.end)
+    df_raw_stocks = acquisition.fetch_yfinance_prices(tickers, args.start, end_date)
 
     print("[step] Fetching macro indicators from FRED...")
-    df_raw_macro = acquisition.fetch_fred_series(args.start, args.end, FRED_SERIES)
+    df_raw_macro = acquisition.fetch_fred_series(args.start, end_date, FRED_SERIES)
 
     # --- Cleaning & Feature Engineering ---
     print("[step] Cleaning stock prices...")

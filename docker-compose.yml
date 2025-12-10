@@ -1,0 +1,11 @@
+services:
+  app:
+    image: jiez12/cs598_fdc_course_project:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/app # Mount the current directory to /app in the container
+    command: ["python", "main.py", "--tickers", "$TICKERS", "--start", "$START_DATE", "--end", "$END_DATE", "--outdir", "$OUTDIR"]
